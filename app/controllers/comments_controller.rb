@@ -60,8 +60,8 @@ class CommentsController < ApplicationController
 
   private
     def ensure_current_user_is_owner
-      if current_user != @photo.owner
-        redirect_back fallback_location: root_url, alert: "Nice try, sucker"
+      if current_user != @comment.owner
+        redirect_back fallback_location: root_url, alert: "You're not authorized to do this."
       end
     end
 
