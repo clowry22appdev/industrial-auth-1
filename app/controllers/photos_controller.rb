@@ -50,10 +50,15 @@ class PhotosController < ApplicationController
 
   # DELETE /photos/1 or /photos/1.json
   def destroy
-    @photo.destroy
-    respond_to do |format|
-      format.html { redirect_back fallback_location: root_url, notice: "Photo was successfully destroyed." }
-      format.json { head :no_content }
+    if current_user != @photo.owner
+      redirect_back fallback_location: root_url, alert: "Nice try, sucker"
+      
+    else
+      @photo.destroy
+      respond_to do |format|
+        format.html { redirect_back fallback_location: root_url, notice: "Photo was successfully destroyed." }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -65,6 +70,6 @@ class PhotosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def photo_params
-      params.require(:photo).permit(:image, :comments_count, :likes_count, :caption, :owner_id)
+      params.require(:photo).permit(:image, :comments_count, :likes_count, :caption)
     end
 end
